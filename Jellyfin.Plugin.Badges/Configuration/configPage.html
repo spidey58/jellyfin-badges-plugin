@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Jellyfin Badges</title>
+</head>
+<body>
+    <div id="BadgesConfigPage" data-role="page" class="page type-interior pluginConfigurationPage" data-require="emby-input,emby-button,emby-checkbox">
+        <div data-role="content">
+            <div class="content-primary">
+                <div class="verticalSection">
+                    <h2 id="BadgesDiagnosticHeading">Jellyfin Badges - script has NOT run yet</h2>
+                    <p>
+                        This is a temporary diagnostic build. If the heading above
+                        changes after the page loads, inline scripts work correctly
+                        for this plugin. If it stays as-is, something is preventing
+                        script execution specifically for this page.
+                    </p>
+                </div>
+
+                <form id="BadgesConfigForm" onsubmit="return false;">
+                    <div class="checkboxContainer checkboxContainer-withDescription">
+                        <label>
+                            <input id="ShowRatingBadge" name="ShowRatingBadge" type="checkbox" is="emby-checkbox" />
+                            <span>Show rating badge (placeholder field for this test)</span>
+                        </label>
+                    </div>
+
+                    <div>
+                        <button is="emby-button" type="submit" class="raised button-submit block emby-button">
+                            <span>Save (test)</span>
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script type="text/javascript">
+        document.querySelector('#BadgesDiagnosticHeading').textContent =
+            'Jellyfin Badges - SCRIPT EXECUTED SUCCESSFULLY';
+        console.log('[Jellyfin Badges] DIAGNOSTIC: inline script tag executed');
+
+        document.querySelector('#BadgesConfigForm').addEventListener('submit', function (e) {
+            e.preventDefault();
+            console.log('[Jellyfin Badges] DIAGNOSTIC: submit intercepted correctly');
+            alert('Submit was intercepted by JavaScript - this part works.');
+            return false;
+        });
+    </script>
+</body>
+</html>
