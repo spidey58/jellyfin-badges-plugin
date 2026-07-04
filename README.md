@@ -64,6 +64,27 @@ No external API calls, no API keys.
 3. No configuration needed - Jellyfin Badges detects and uses it
    automatically on next startup
 
+### Alternative: Docker volume mount
+
+If you'd rather not install another plugin, you can instead give the
+Jellyfin container write access to just `index.html`:
+
+```bash
+docker cp <container_name>:/usr/share/jellyfin/web/index.html ./index.html
+```
+
+Then add a volume mount in your `docker-compose.yml` (adjust the source
+path and container web path to match your setup):
+
+```yaml
+volumes:
+  - ./index.html:/usr/share/jellyfin/web/index.html
+```
+
+Recreate the container. This gives the file the container's own
+ownership instead of the read-only image layer's, so the plugin's
+fallback direct-write method can succeed.
+
 ## Development
 
 Build locally:

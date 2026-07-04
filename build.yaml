@@ -1,6 +1,6 @@
 name: "Jellyfin Badges"
 guid: "2c0f75c3-6aad-4003-95e3-0fd418279ac3"
-version: "1.0.1.0"
+version: "1.0.2.0"
 targetAbi: "10.9.0.0"
 framework: "net8.0"
 overview: "Displays HDR/Dolby Vision, audio format, source, and rating badges on the detail page."
@@ -15,6 +15,9 @@ owner: "spidey58"
 artifacts:
   - "Jellyfin.Plugin.Badges.dll"
 changelog: >
+  - v1.0.2.0: Fixed config page performing a native form submission instead
+    of saving via AJAX (added onsubmit guard, moved preventDefault to top
+    of handler, added diagnostic console logging).
   - v1.0.1.0: Fixed plugin version showing 0.0.0.0 (explicit AssemblyVersion).
     Added File Transformation plugin integration for permission-free
     index.html injection in Docker deployments, with direct-write fallback.
