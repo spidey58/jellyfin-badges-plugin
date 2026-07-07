@@ -1,0 +1,86 @@
+name: Build and Release Plugin
+
+on:
+  push:
+    branches: [main]
+    tags: ["v*"]
+  workflow_dispatch: {}
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: "8.0.x"
+
+      - name: Restore
+        run: dotnet restore Jellyfin.Plugin.Badges/Jellyfin.Plugin.Badges.csproj
+
+      - name: Build
+        run: dotnet build Jellyfin.Plugin.Badges/Jellyfin.Plugin.Badges.csproj -c Release --no-restore
+
+      - name: Read version from build.yaml
+        id: version
+        run: |
+          VERSION=$(grep '^version:' build.yaml | sed 's/version: *"//;s/"//')
+          echo "version=$VERSION" >> "$GITHUB_OUTPUT"
+
+      - name: Package plugin zip
+        run: |
+          mkdir -p dist
+          DLL_PATH=$(find Jellyfin.Plugin.Badges/bin/Release -name "Jellyfin.Plugin.Badges.dll" | head -n1)
+          ZIP_NAME="jellyfin-badges_${{ steps.version.outputs.version }}.zip"
+          cd "$(dirname "$DLL_PATH")"
+          zip "$GITHUB_WORKSPACE/dist/$ZIP_NAME" "Jellyfin.Plugin.Badges.dll"
+          cd "$GITHUB_WORKSPACE"
+          echo "ZIP_NAME=$ZIP_NAME" >> "$GITHUB_ENV"
+
+      - name: Compute checksum
+        id: checksum
+        run: |
+          CHECKSUM=$(md5sum "dist/$ZIP_NAME" | cut -d' ' -f1)
+          echo "checksum=$CHECKSUM" >> "$GITHUB_OUTPUT"
+
+      - name: Create GitHub Release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: "v${{ steps.version.outputs.version }}"
+          name: "v${{ steps.version.outputs.version }}"
+          files: dist/${{ env.ZIP_NAME }}
+          body: |
+            Automated build of Jellyfin Badges v${{ steps.version.outputs.version }}.
+
+            MD5 checksum: ${{ steps.checksum.outputs.checksum }}
+
+            ## Install
+            Add this repository to Jellyfin:
+            Dashboard > Plugins > Repositories >
+            `https://raw.githubusercontent.com/${{ github.repository }}/main/manifest.json`
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Update manifest.json
+        run: |
+          python3 scripts/update_manifest.py \
+            --version "${{ steps.version.outputs.version }}" \
+            --checksum "${{ steps.checksum.outputs.checksum }}" \
+            --repo "${{ github.repository }}" \
+            --zip-name "$ZIP_NAME"
+
+      - name: Commit manifest.json
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add manifest.json
+          git diff --cached --quiet || git commit -m "Update manifest.json for v${{ steps.version.outputs.version }}"
+          git fetch origin main
+          git rebase origin/main
+          git push
