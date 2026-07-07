@@ -13,8 +13,8 @@
                 "changelog": "Automated release v1.1.0.0",
                 "targetAbi": "10.9.0.0",
                 "sourceUrl": "https://github.com/spidey58/jellyfin-badges-plugin/releases/download/v1.1.0.0/jellyfin-badges_1.1.0.0.zip",
-                "checksum": "96b3dde9f1f71e3a000266667026ac1d",
-                "timestamp": "2026-07-07T19:33:26Z"
+                "checksum": "b0fb55960841f928a389402205d8e235",
+                "timestamp": "2026-07-07T20:14:30Z"
             }
         ]
     }
