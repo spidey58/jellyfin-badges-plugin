@@ -1,0 +1,12 @@
+[
+    {
+        "guid": "2c0f75c3-6aad-4003-95e3-0fd418279ac3",
+        "name": "Jellyfin Badges",
+        "description": "Displays HDR/Dolby Vision, audio format, source, and rating badges on the detail page.",
+        "overview": "HDR/Dolby Vision, audio, source, and rating badges for the detail page.",
+        "owner": "spidey58",
+        "category": "General",
+        "imageUrl": "",
+        "versions": []
+    }
+]
