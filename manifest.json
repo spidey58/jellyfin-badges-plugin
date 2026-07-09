@@ -6,7 +6,7 @@
         "overview": "HDR/Dolby Vision, audio, source, and rating badges for the detail page.",
         "owner": "spidey58",
         "category": "General",
-        "imageUrl": "",
+        "imageUrl": "https://raw.githubusercontent.com/spidey58/jellyfin-badges-plugin/refs/heads/main/logo.png",
         "versions": [
             {
                 "version": "1.2.1.0",
