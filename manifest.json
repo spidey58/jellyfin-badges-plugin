@@ -7,6 +7,15 @@
         "owner": "spidey58",
         "category": "General",
         "imageUrl": "",
-        "versions": []
+        "versions": [
+            {
+                "version": "1.2.1.0",
+                "changelog": "Automated release v1.2.1.0",
+                "targetAbi": "10.9.0.0",
+                "sourceUrl": "https://github.com/spidey58/jellyfin-badges-plugin/releases/download/v1.2.1.0/jellyfin-badges_1.2.1.0.zip",
+                "checksum": "e87d8ae44cac42ac678c7c1e22e83943",
+                "timestamp": "2026-07-09T17:55:20Z"
+            }
+        ]
     }
 ]
