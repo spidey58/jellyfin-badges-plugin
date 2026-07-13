@@ -1,0 +1,56 @@
+name: "Jellyfin Badges"
+guid: "2c0f75c3-6aad-4003-95e3-0fd418279ac3"
+version: "1.3.1.0"
+targetAbi: "10.9.0.0"
+framework: "net8.0"
+overview: "Displays HDR/Dolby Vision, audio format, source, and rating badges on the detail page."
+description: >
+  Jellyfin Badges reads the media stream and rating data Jellyfin already
+  has (populated from your NFO metadata) and renders logo-style badges for
+  resolution, codec, HDR/Dolby Vision, audio format (Atmos, TrueHD, DTS:X),
+  source (UHD Blu-ray, Blu-ray, WEB-DL), and community rating directly on
+  the item detail page. No external API calls or API keys required.
+category: "General"
+owner: "spidey58"
+artifacts:
+  - "Jellyfin.Plugin.Badges.dll"
+changelog: >
+  - v1.3.1.0: Rating score text now uses a per-source color (IMDb gold,
+    TMDb teal) via a RATING_COLORS map in badges.js, instead of one
+    hardcoded color for both.
+  - v1.3.0.0: Removed three secondary behavior checkboxes (Atmos-before-
+    TrueHD ordering, HDR suppression with Dolby Vision, channel layout
+    suppression with Atmos/DTS:X) - these are now hardcoded to their
+    sensible defaults instead of being configurable. Config page now only
+    shows one checkbox per actual badge, next to its URL.
+  - v1.2.1.0: Rebuilt config page layout as a proper table (checkbox,
+    label, URL columns) since the emby-checkbox custom element restructures
+    itself on activation, breaking the previous flexbox-based alignment.
+  - v1.2.0.0: Added TMDb rating badge, read directly from the NFO file
+    (Jellyfin's API only exposes one collapsed CommunityRating value, so
+    per-source ratings like tmdb aren't otherwise retrievable). Replaced
+    category-level toggles (Show HDR/Audio/Source/Rating) with individual
+    enable checkboxes placed directly next to each logo's URL field.
+  - v1.1.0.0: Replaced single "logo base URL" setting with 14 individually
+    editable logo URL fields (one per badge type), so any single logo can
+    be repointed without affecting the others.
+  - v1.0.8.0: Fixed injected script tag using a relative URL
+    (src="Badges/script"), which the browser resolved against /web/
+    instead of the server root, causing a silent 404 and badges.js never
+    loading. Now uses an absolute path (src="/Badges/script").
+  - v1.0.7.0: Fixed File Transformation payload extraction - the payload
+    is a JObject exposing data via indexer, not plain CLR properties.
+  - v1.0.5.0: Fixed config page script never executing. Root cause: the
+    Jellyfin 10.11 dashboard SPA inserts plugin config page HTML via
+    innerHTML, which never executes inline <script> tags (standard browser
+    behavior). Fixed by using an img onerror attribute (which fires
+    normally regardless of insertion method) to bootstrap a dynamically
+    created <script src="..."> element, which does execute normally. Full
+    config UI restored.
+  - v1.0.4.0 / v1.0.3.0: diagnostic builds used to isolate the above bug.
+  - v1.0.2.0: Fixed config page performing a native form submission instead
+    of saving via AJAX.
+  - v1.0.1.0: Fixed plugin version showing 0.0.0.0. Added File
+    Transformation plugin integration for permission-free index.html
+    injection in Docker deployments, with direct-write fallback.
+  - v1.0.0.0: Initial release.
